@@ -1,0 +1,50 @@
+# You can run the following command to validate this file
+# curl --data-binary @codecov.yml https://codecov.io/validate
+
+codecov:
+  bot: next-build-write
+
+comment:
+  layout: "reach, diff, flags, files"
+  behavior: default
+  require_changes: false  # if true: only post the comment if coverage changes
+
+coverage:
+  precision: 2
+  round: down
+  # anything below 50 is red
+  range: "50...100"
+  ignore:
+    - "vendor"
+    - "**/mock_*"
+    - "scripts"
+  status:
+    project:
+      default:
+        # minimum threshold for a build to be considered a success
+        target: 50
+        # allow the coverage to drop by X%, and posting a success status
+        threshold: 10
+        base: auto
+        # advanced
+        branches: null
+        if_no_uploads: error
+        if_not_found: success
+        if_ci_failed: error
+        only_pulls: false
+        flags: null
+        paths: null
+    patch:
+      default:
+        # basic
+        target: 0
+        threshold: 5
+        base: auto
+        # advanced
+        branches: null
+        if_no_uploads: error
+        if_not_found: success
+        if_ci_failed: error
+        only_pulls: false
+        flags: null
+        paths: null

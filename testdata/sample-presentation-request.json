@@ -1,0 +1,33 @@
+{
+  "proofRequestInstanceId": "1234",
+  "proofURL": "https://response-endppint.com/path",
+  "proofRequest": {
+    "description": "Sample Application",
+    "verifier": "did:work:AhhKCqtZjq5z3RqCihfyv6",
+    "criteria": [
+      {
+        "description": "Contact Information",
+        "reason": "Send information regarding your application",
+        "issuers": {
+          "dids": [
+            "did:work:AhhKCqtZjq5z3RqCihfyv6"
+          ]
+        },
+        "max": 1,
+        "min": 1,
+        "schema": {
+          "id": "did:work:39FMYorz57NhcKvQ94WoYo;id=37d54e37-921b-41ab-882c-24b05ec6392c;version=1.0",
+          "did": "did:work:39FMYorz57NhcKvQ94WoYo",
+          "resource": "37d54e37-921b-41ab-882c-24b05ec6392c",
+          "version": "^1.0",
+          "attributes": [
+            {
+              "name": "firstName",
+              "required": true
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

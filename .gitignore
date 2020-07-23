@@ -1,0 +1,6 @@
+mage
+go-wallet
+Makefile
+.idea/*
+.gobincache/*
+*credstore.db*
