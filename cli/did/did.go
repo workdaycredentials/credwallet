@@ -15,15 +15,15 @@ import (
 )
 
 const (
-	idFlag = "did"
+	didFlag = "did"
 )
 
 func init() {
 	// Add sub commands to DID command
 	DID.AddCommand(newDID)
 
-	viewDID.PersistentFlags().String(idFlag, "", "Specify the DID doc id.")
-	_ = viewDID.MarkFlagRequired(idFlag)
+	viewDID.PersistentFlags().String(didFlag, "", "Specify the DID doc id.")
+	_ = viewDID.MarkFlagRequired(didFlag)
 	DID.AddCommand(viewDID)
 
 	// Add DID command to root and validate
@@ -74,7 +74,7 @@ var (
 			defer storage.Close()
 
 			didDoc, privateKey := ledger.GenerateLedgerDIDDoc(proof.Ed25519KeyType, proof.JCSEdSignatureType)
-			StructPrinter(KeyMaterial{*didDoc, hex.EncodeToString(privateKey)})
+			StructPrinter(keyMaterial{DIDDoc: *didDoc, PrivateKey: hex.EncodeToString(privateKey)})
 
 			if err := storage.WriteDID(*didDoc); err != nil {
 				fmt.Printf("Unable to write DID Doc<%s> to storage: %s\n", didDoc.ID, err.Error())
@@ -92,7 +92,7 @@ var (
 		Use:     "view",
 		Short:   "View a DID Document",
 		Long:    "View a specific DID Document",
-		Example: "credwallet did view --did=<id>",
+		Example: fmt.Sprintf("credwallet did view --%s=<did>", didFlag),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			storage, err := bolt.NewStorage()
@@ -102,7 +102,7 @@ var (
 			}
 			defer storage.Close()
 
-			id := viper.GetString(idFlag)
+			id := viper.GetString(didFlag)
 			doc, err := storage.ReadDIDDoc(id)
 			if err != nil {
 				fmt.Printf("Unable to read DID<%s>: %s\n", id, err.Error())
@@ -114,7 +114,7 @@ var (
 	}
 )
 
-type KeyMaterial struct {
+type keyMaterial struct {
 	DIDDoc     ledger.DIDDoc `json:"diddoc"`
 	PrivateKey string        `json:"privatekey_hex"`
 }

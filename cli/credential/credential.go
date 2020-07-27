@@ -16,11 +16,11 @@ import (
 )
 
 const (
-	credDefIDFlag  = "creddef"
+	credDefIDFlag  = "credDef"
 	subjectIDFlag  = "subject"
-	credFileFlag   = "cfile"
-	attributesFlag = "cjson"
-	credIDFlag     = "cid"
+	credFileFlag   = "credFile"
+	attributesFlag = "credJson"
+	credIDFlag     = "credId"
 )
 
 func init() {
@@ -75,7 +75,7 @@ var (
 		Use:     "new",
 		Short:   "Create a new Cred",
 		Long:    "Create a new Cred, and store to the local store.",
-		Example: "credwallet cred new --credDef=<id> --subject=<id> --credFile=<filePath>",
+		Example: fmt.Sprintf("credwallet cred new --%s=<cred-def-id> --%s=<subject-did> --%s=</file/cred-file.json>", credDefIDFlag, subjectIDFlag, credFileFlag),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Validate flags
@@ -182,7 +182,7 @@ var (
 		Use:     "view",
 		Short:   "View a Credential",
 		Long:    "View a specific Credential",
-		Example: "credwallet cred view --cred=<cred-id>",
+		Example: fmt.Sprintf("credwallet cred view --%s=<cred-id>", credIDFlag),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			storage, err := bolt.NewStorage()

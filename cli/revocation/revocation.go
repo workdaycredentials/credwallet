@@ -69,7 +69,7 @@ var (
 		Use:     "new",
 		Short:   "Create a new Revocation",
 		Long:    "Create a new Revocation, and store to the local store.",
-		Example: "credwallet revocation new --cred=<id> --issuer=<id>",
+		Example: fmt.Sprintf("credwallet revocation new --%s=<cred-id> --%s=<issuer-id>", credIDFlag, issuerIDFlag),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			storage, err := bolt.NewStorage()
@@ -126,7 +126,7 @@ var (
 		Use:     "view",
 		Short:   "View a Revocation",
 		Long:    "View a specific Revocation",
-		Example: "credwallet cred view --revocation=<revocation-id>",
+		Example: fmt.Sprintf("credwallet cred view --%s=<revocation-id>", revocationIDFlag),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			storage, err := bolt.NewStorage()

@@ -9,19 +9,18 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/workdaycredentials/ledger-common/ledger"
 
 	. "github.com/workdaycredentials/credwallet/cli"
-
-	"github.com/workdaycredentials/ledger-common/ledger"
 
 	"github.com/workdaycredentials/credwallet/cli/storage/bolt"
 )
 
 const (
-	attributesFlag = "sjson"
-	authorFlag     = "sauthor"
-	schemaFileFlag = "sinput"
-	idFlag         = "sid"
+	attributesFlag = "schemaJson"
+	authorFlag     = "schemaAuthor"
+	schemaFileFlag = "schemaFile"
+	schemaIDFlag   = "schemaId"
 )
 
 func init() {
@@ -31,8 +30,8 @@ func init() {
 	_ = newSchema.MarkFlagRequired(authorFlag)
 	Schema.AddCommand(newSchema)
 
-	viewSchema.PersistentFlags().String(idFlag, "", "Can be used to specify the ID of the schema")
-	_ = viewSchema.MarkFlagRequired(idFlag)
+	viewSchema.PersistentFlags().String(schemaIDFlag, "", "Can be used to specify the ID of the schema")
+	_ = viewSchema.MarkFlagRequired(schemaIDFlag)
 	Schema.AddCommand(viewSchema)
 
 	RootCmd.AddCommand(Schema)
@@ -70,7 +69,7 @@ var (
 		Use:     "new",
 		Short:   "create new schema",
 		Long:    "Create a new schema, and store to the local store.",
-		Example: "credwallet schema generate --inputfile sample-schema.json --author did:work:XXXX",
+		Example: fmt.Sprintf("credwallet schema generate --%s=</input/sample-schema.json> --%s=<schema-author>,", schemaFileFlag, authorFlag),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Validate flags
@@ -143,7 +142,7 @@ var (
 		Use:     "view",
 		Short:   "view schema",
 		Long:    "View a schema, using its ID.",
-		Example: "credwallet schema view --sid did:work:XXXX",
+		Example: fmt.Sprintf("credwallet schema view --%s=<schema-id>", schemaIDFlag),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			storage, err := bolt.NewStorage()
@@ -153,7 +152,7 @@ var (
 			}
 			defer storage.Close()
 
-			id := viper.GetString(idFlag)
+			id := viper.GetString(schemaIDFlag)
 			schema, err := storage.ReadSchema(id)
 			if err != nil {
 				fmt.Printf("Unable to read Schema<%s>: %s\n", id, err.Error())

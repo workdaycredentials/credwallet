@@ -18,13 +18,13 @@ import (
 )
 
 const (
-	inputFileFlag             = "pinput"
-	inputJSONFlag             = "pjson"
-	presentationRequestIDFlag = "pid"
-	presentationHolderIDFlag  = "holder"
+	inputFileFlag             = "presFile"
+	inputJSONFlag             = "presJson"
+	presentationRequestIDFlag = "presId"
+	presentationHolderIDFlag  = "presHolder"
 
-	viewPresReqIDFlag  = "preqid"
-	viewPresRespIDFlag = "presid"
+	viewPresReqIDFlag  = "presReqId"
+	viewPresRespIDFlag = "presRespId"
 )
 
 func init() {
@@ -89,7 +89,7 @@ var (
 		Use:     "new",
 		Short:   "Create a new presentation request",
 		Long:    "Create a new presentation request and store data to the local store.",
-		Example: "credwallet presentation new",
+		Example: fmt.Sprintf("credwallet presentation new --%s=</input/file.json>", inputFileFlag),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			storage, err := bolt.NewStorage()
@@ -175,7 +175,7 @@ var (
 		Use:     "response",
 		Short:   "Create a new presentation response to an existing request",
 		Long:    "Create a new presentation response to an existing request and store data to the local store.",
-		Example: "credwallet presentation response",
+		Example: fmt.Sprintf("credwallet presentation response --%s=presentation-request-id> --%s=<holder-did>", presentationRequestIDFlag, presentationHolderIDFlag),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			storage, err := bolt.NewStorage()
@@ -235,7 +235,7 @@ var (
 		Use:     "viewreq",
 		Short:   "view a presentation request",
 		Long:    "View a presentation request, using its ID.",
-		Example: "credwallet pres viewreq --preqid abcd-efgh-ijkl",
+		Example: fmt.Sprintf("credwallet pres viewreq --%s=<pres-request-id>", viewPresReqIDFlag),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			storage, err := bolt.NewStorage()
@@ -261,7 +261,7 @@ var (
 		Use:     "viewres",
 		Short:   "view a presentation response",
 		Long:    "View a presentation response, using its ID.",
-		Example: "credwallet pres viewres --presid abcd-efgh-ijkl",
+		Example: fmt.Sprintf("credwallet pres viewres --%s=<pres-response-id>", viewPresRespIDFlag),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			storage, err := bolt.NewStorage()

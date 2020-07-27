@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	idFlag         = "cdid"
+	credDefIDFlag  = "credDefId"
 	controllerFlag = "controller"
 	schemaIDFlag   = "schema"
 )
@@ -25,8 +25,8 @@ func init() {
 	_ = newCredDef.MarkFlagRequired(schemaIDFlag)
 	CredDef.AddCommand(newCredDef)
 
-	viewCredDef.PersistentFlags().String(idFlag, "", "Specify the Cred Def ID.")
-	_ = viewCredDef.MarkFlagRequired(idFlag)
+	viewCredDef.PersistentFlags().String(credDefIDFlag, "", "Specify the Cred Def ID.")
+	_ = viewCredDef.MarkFlagRequired(credDefIDFlag)
 	CredDef.AddCommand(viewCredDef)
 
 	RootCmd.AddCommand(CredDef)
@@ -66,7 +66,7 @@ var (
 		Use:     "new",
 		Short:   "Create a new Cred Def DID",
 		Long:    "Create a new Cred Def DID, and store key-material to the local store.",
-		Example: "credwallet creddef new --controller=<id> --schema=<id>",
+		Example: fmt.Sprintf("credwallet creddef new --%s=<controller-did> --%s=<schema-id>", controllerFlag, schemaIDFlag),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			storage, err := bolt.NewStorage()
@@ -104,7 +104,7 @@ var (
 		Use:     "view",
 		Short:   "View a DID Document",
 		Long:    "View a specific DID Document",
-		Example: "credwallet did view --id=<id>",
+		Example: fmt.Sprintf("credwallet did view --%s=<creddef-did>", credDefIDFlag),
 		Args:    cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			storage, err := bolt.NewStorage()
@@ -114,7 +114,7 @@ var (
 			}
 			defer storage.Close()
 
-			id := viper.GetString(idFlag)
+			id := viper.GetString(credDefIDFlag)
 			credDef, err := storage.ReadCredDef(id)
 			if err != nil {
 				fmt.Printf("Unable to read Cred Def<%s>: %s\n", id, err.Error())
