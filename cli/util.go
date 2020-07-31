@@ -240,3 +240,9 @@ func CmdErr(cmd *cobra.Command, err error) error {
 	fmt.Println(cmd.UsageString())
 	return err
 }
+
+
+type KeyMaterial struct {
+	DIDDoc     ledger.DIDDoc `json:"diddoc"`
+	PrivateKey string        `json:"privatekey_hex"`
+}

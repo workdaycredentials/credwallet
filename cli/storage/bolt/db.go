@@ -497,10 +497,10 @@ func (s Storage) ListPresentationRequests() ([]presentation.CompositeProofReques
 func (s Storage) ValidatePresentationRequest(pr presentation.UnsignedCompositeProofRequestInstanceChallenge) error {
 	if _, err := s.ReadDIDDoc(pr.ProofRequest.Verifier); err != nil {
 		logrus.WithError(err).Warn("Error during validating verifier DID from DID storage; falling back to Cred Def storage.")
-	}
-	if _, err := s.ReadCredDef(pr.ProofRequest.Verifier); err != nil {
-		logrus.WithError(err).Warn("Error during validating verifier DID.")
-		return err
+		if _, err := s.ReadCredDef(pr.ProofRequest.Verifier); err != nil {
+			logrus.WithError(err).Warn("Error during validating verifier DID.")
+			return err
+		}
 	}
 
 	// For each criterion validate the issuer and schema exist

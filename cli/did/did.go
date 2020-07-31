@@ -74,7 +74,7 @@ var (
 			defer storage.Close()
 
 			didDoc, privateKey := ledger.GenerateLedgerDIDDoc(proof.Ed25519KeyType, proof.JCSEdSignatureType)
-			StructPrinter(keyMaterial{DIDDoc: *didDoc, PrivateKey: hex.EncodeToString(privateKey)})
+			StructPrinter(KeyMaterial{DIDDoc: *didDoc, PrivateKey: hex.EncodeToString(privateKey)})
 
 			if err := storage.WriteDID(*didDoc); err != nil {
 				fmt.Printf("Unable to write DID Doc<%s> to storage: %s\n", didDoc.ID, err.Error())
@@ -114,7 +114,3 @@ var (
 	}
 )
 
-type keyMaterial struct {
-	DIDDoc     ledger.DIDDoc `json:"diddoc"`
-	PrivateKey string        `json:"privatekey_hex"`
-}

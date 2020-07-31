@@ -1,6 +1,7 @@
 package creddef
 
 import (
+	"encoding/hex"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -8,8 +9,6 @@ import (
 
 	. "github.com/workdaycredentials/credwallet/cli"
 	"github.com/workdaycredentials/credwallet/cli/storage/bolt"
-
-	"encoding/hex"
 )
 
 const (
@@ -85,8 +84,7 @@ var (
 				fmt.Printf("Could not build cred def: %s", err.Error())
 				return CmdErr(cmd, err)
 			}
-			StructPrinter(credDef)
-			fmt.Printf("Private Key (hex): %s\n", hex.EncodeToString(privateKey))
+			StructPrinter(KeyMaterial{DIDDoc: *credDef, PrivateKey: hex.EncodeToString(privateKey)})
 
 			if err := storage.WriteCredDef(*credDef, controllerDID, schemaID); err != nil {
 				fmt.Printf("Unable to write DID Doc<%s> to storage: %s\n", credDef.ID, err.Error())
